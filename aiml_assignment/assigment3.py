@@ -5,6 +5,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
+
 # --- 1. Dataset Generation ---
 def generate_smart_grid_dataset(n_samples: int = 1200, random_seed: int = 42) -> pd.DataFrame:
     np.random.seed(random_seed)
@@ -32,6 +33,7 @@ def generate_smart_grid_dataset(n_samples: int = 1200, random_seed: int = 42) ->
         "Uptime_Hours": np.round(uptime, 1),
         "Total_Power_kW": np.round(total_power, 2)
     })
+
 
 # --- 2. Custom Linear Regression Class ---
 class CustomLinearRegression:
@@ -65,6 +67,7 @@ class CustomLinearRegression:
     def predict(self, X: np.ndarray) -> np.ndarray:
         return X @ self.weights + self.intercept
 
+
 # --- 3. Execution & Verification ---
 if __name__ == "__main__":
     # Generate Data
@@ -72,7 +75,7 @@ if __name__ == "__main__":
     X = df[["Ambient_Temp_C", "Cluster_Utilization_Pct", "Chiller_Demand_kW", "Uptime_Hours"]].values
     y = df["Total_Power_kW"].values
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_test_size=0.2, random_state=42) if 'test_test_size' not in locals() else train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # 1. Scikit-Learn Model
     sklearn_model = LinearRegression()
@@ -85,7 +88,7 @@ if __name__ == "__main__":
     # 3. Custom Gradient Descent Model (requires feature scaling)
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
-    
+
     custom_gd = CustomLinearRegression()
     custom_gd.fit_gd(X_train_scaled, y_train, alpha=0.05, epochs=5000)
 
